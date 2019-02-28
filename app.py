@@ -50,6 +50,16 @@ def images(path):
     # resp.content_type = "image/jpeg"
     # return resp
 
+@app.route("test")
+def test():
+    cmd = "cd {} && ls".format(CP_DIR)
+    process = subprocess.Popen([cmd], stdout=subprocess.PIPE)
+    print("Run successfully")
+    output, err = process.communicate()
+    print("cmd output: {}\nerr: {}".format(output, err))
+
+    return output
+
 
 def gen_img(batch_size: int, img_size: int, model_name: str, noise_mode: str) -> str:
     assert noise_mode in NOISE_MODES

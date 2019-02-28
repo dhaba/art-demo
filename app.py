@@ -59,11 +59,14 @@ def gen_img(batch_size: int, img_size: int, model_name: str, noise_mode: str) ->
 
     # TODO extra validation for noise modes that only do batch size of 1???
 
-    cmd = "gpu=1 batchSize={} net={} imsize={} name={} display=0 noisemode={}".format(batch_size, latest_cp, img_size, f_name, noise_mode)
+    cmd = "cd {}; gpu=1 batchSize={} net={} imsize={} name={} display=0 noisemode={}"\
+          .format(PROJ_DIR, batch_size, latest_cp, img_size, f_name, noise_mode)
 
     print("Executing cmd:\n{}".format(cmd))
     os.system(cmd)
     print("Done executing cmd")
+
+    f_name = PROJ_DIR + f_name
 
     assert os.path.exists(f_name), "Expected file {} to exist!!!".format(f_name)
     print("path exists...")

@@ -23,24 +23,13 @@ def generate():
     img_size = request.args['imSize']
     model_name = request.args['model']
     noise_mode = request.args['noiseMode']
+    cpNum = request.args['cpNum']
 
-    img_path = gen_img(batch_size, img_size, model_name, noise_mode)
+    img_path = gen_img(batch_size, img_size, model_name, noise_mode, cpNum)
     print("got img path {}".format(img_path))
 
     return send_file(img_path, mimetype='image/png')
-    # resp = make_response(open(img_path).read())
-    # resp.content_type = "image/png"
-    # return resp
 
-@app.route("/imgs/<path>")
-def images(path):
-    print("path is {}".format(path))
-    return 'hi'
-    # generate_img(path)
-    # fullpath = "./imgs/" + path
-    # resp = flask.make_response(open(fullpath).read())
-    # resp.content_type = "image/jpeg"
-    # return resp
 
 @app.route("/test")
 def test():
@@ -51,10 +40,10 @@ def test():
     return 'out: ' + str(output)
 
 
-def gen_img(batch_size: int, img_size: int, model_name: str, noise_mode: str) -> str:
+def gen_img(batch_size: int, img_size: int, model_name: str, noise_mode: str, cp_num: int) -> str:
     assert noise_mode in NOISE_MODES
     date_str = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-    cp_num, latest_cp = get_latest_checkpoint_num(model_name)
+    cp_num, latest_cp = get_latest_checkpoint_num(model_name, cp_num)
     f_name = "{}_{}_{}".format(model_name, cp_num, date_str)
 
     # TODO extra validation for noise modes that only do batch size of 1???
@@ -63,18 +52,8 @@ def gen_img(batch_size: int, img_size: int, model_name: str, noise_mode: str) ->
         .format(PROJ_DIR, batch_size, latest_cp, img_size, f_name, noise_mode)
 
     print("Executing cmd:\n{}".format(cmd))
-    # subprocess.call([cmd], shell=True)
     os.system(cmd)
     print("Done executing command".format(cmd))
-    # os.system(cmd)
-    # cmd_succ = subprocess.check_output([cmd], shell=True)
-    # print("Done executing cmd (succ={})".format(cmd_succ))
-
-    # process = subprocess.Popen([cmd], stdout=subprocess.PIPE)
-    # print("Run successfully")
-    # output, err = process.communicate()
-    # print("cmd output: {}\nerr: {}".format(output, err))
-
     f_name = PROJ_DIR + f_name + ".png"
 
     assert os.path.exists(f_name), "Expected file {} to exist!!!".format(f_name)
@@ -83,25 +62,29 @@ def gen_img(batch_size: int, img_size: int, model_name: str, noise_mode: str) ->
     return f_name
 
 
-def get_latest_checkpoint_num(model_name: str):
+def get_latest_checkpoint_num(model_name: str, num: int):
     prefix = "{}{}_".format(CP_DIR, model_name)
     suffix = "_net_G.t7"
     pattern = "{}*{}".format(prefix, suffix)
     all_checkpoints = glob.glob(pattern)
     assert len(all_checkpoints) > 0, "No checkpoints found matching glob {}".format(pattern)
 
-    cp_nums = []
-    for f_name in all_checkpoints:
-        cp_num = int(f_name[len(prefix):-len(suffix)])
-        print("f name {} has cp_num {}".format(f_name, cp_num))
-        cp_nums.append(cp_num)
+    if num is None or num == 0:
+        cp_nums = []
+        for f_name in all_checkpoints:
+            cp_num = int(f_name[len(prefix):-len(suffix)])
+            print("f name {} has cp_num {}".format(f_name, cp_num))
+            cp_nums.append(cp_num)
+        assert len(cp_nums) > 0, "this is bad u done fucked up davis"
+        max_cp = max(cp_nums)
+    else:
+        max_cp = num
 
-    assert len(cp_nums) > 0, "this is bad u done fucked up davis"
-    latest_cp = "{}{}{}".format(prefix, max(cp_nums), suffix)
+    latest_cp = "{}{}{}".format(prefix, max_cp, suffix)
     assert os.path.exists(latest_cp), "Expected checkpoint at path {}, but not found".format(latest_cp)
 
     print("latest check {}".format(latest_cp))
-    return max(cp_nums), latest_cp
+    return max_cp, latest_cp
 
 
 if __name__ == '__main__':

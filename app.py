@@ -66,6 +66,7 @@ def gen_img(batch_size: int, img_size: int, model_name: str, noise_mode: str) ->
     print("Done executing cmd")
 
     assert os.path.exists(f_name), "Expected file {} to exist!!!".format(f_name)
+    print("path exists...")
 
     return f_name
 

@@ -4,7 +4,7 @@ import os, time, subprocess, random, datetime, glob, subprocess
 
 app = Flask(__name__)
 
-PROJ_DIR = '/home/dhaba/art-fart/art-DCGAN/'
+PROJ_DIR = '~/art-fart/art-DCGAN/'
 # PROJ_DIR = '/Users/davishaba/PycharmProjects/demo/'
 CP_DIR = PROJ_DIR + 'checkpoints/'
 GEN_DIR = PROJ_DIR
@@ -52,8 +52,8 @@ def images(path):
 
 @app.route("/test")
 def test():
-    # cmd = "cd {} && ls".format(CP_DIR)
-    cmd = "ls"
+    cmd = "cd {} && ls".format(CP_DIR)
+    # cmd = "ls"
     process = subprocess.Popen([cmd], stdout=subprocess.PIPE)
     print("Run successfully")
     output, err = process.communicate()

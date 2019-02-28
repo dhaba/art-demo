@@ -24,7 +24,7 @@ def generate():
     model_name = request.args['model']
     noise_mode = request.args['noiseMode']
 
-    _, img_path = gen_img(batch_size, img_size, model_name, noise_mode)
+    img_path = gen_img(batch_size, img_size, model_name, noise_mode)
     print("got img path {}".format(img_path))
 
     resp = make_response(open(img_path).read())
@@ -66,7 +66,6 @@ def gen_img(batch_size: int, img_size: int, model_name: str, noise_mode: str) ->
     print("Done executing cmd")
 
     return f_name
-
 
 
 def get_latest_checkpoint_num(model_name: str):

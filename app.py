@@ -43,7 +43,8 @@ def images(path):
 
 @app.route("/test")
 def test():
-    cmd = 'cd {} && ls'.format(PROJ_DIR)
+    print("route hit...")
+    cmd = 'sleep 4 && cd {} && ls'.format(PROJ_DIR)
     output = subprocess.call([cmd], shell=True)
 
     return 'out: ' + str(output)
@@ -61,14 +62,16 @@ def gen_img(batch_size: int, img_size: int, model_name: str, noise_mode: str) ->
           .format(PROJ_DIR, batch_size, latest_cp, img_size, f_name, noise_mode)
 
     print("Executing cmd:\n{}".format(cmd))
+    subprocess.call([cmd], shell=True)
+    print("Done executing command".format(cmd))
     # os.system(cmd)
     # cmd_succ = subprocess.check_output([cmd], shell=True)
     # print("Done executing cmd (succ={})".format(cmd_succ))
 
-    process = subprocess.Popen([cmd], stdout=subprocess.PIPE)
-    print("Run successfully")
-    output, err = process.communicate()
-    print("cmd output: {}\nerr: {}".format(output, err))
+    # process = subprocess.Popen([cmd], stdout=subprocess.PIPE)
+    # print("Run successfully")
+    # output, err = process.communicate()
+    # print("cmd output: {}\nerr: {}".format(output, err))
 
     f_name = PROJ_DIR + f_name + ".png"
 

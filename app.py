@@ -53,6 +53,7 @@ def images(path):
 @app.route("/test")
 def test():
     cmd = "cd {} && ls".format(CP_DIR)
+    cmd = "cd {}".format(CP_DIR)
     # cmd = "ls"
     process = subprocess.Popen([cmd], stdout=subprocess.PIPE)
     print("Run successfully")

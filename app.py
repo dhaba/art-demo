@@ -1,5 +1,5 @@
 from flask import Flask, request, make_response
-import os, time, subprocess, random, datetime, glob
+import os, time, subprocess, random, datetime, glob, subprocess
 
 
 app = Flask(__name__)
@@ -63,10 +63,11 @@ def gen_img(batch_size: int, img_size: int, model_name: str, noise_mode: str) ->
           .format(PROJ_DIR, batch_size, latest_cp, img_size, f_name, noise_mode)
 
     print("Executing cmd:\n{}".format(cmd))
-    os.system(cmd)
-    print("Done executing cmd")
+    # os.system(cmd)
+    cmd_succ = subprocess.check_output([cmd], shell=True)
+    print("Done executing cmd (succ={})".format(cmd_succ))
 
-    f_name = PROJ_DIR + f_name
+    f_name = PROJ_DIR + f_name + ".png"
 
     assert os.path.exists(f_name), "Expected file {} to exist!!!".format(f_name)
     print("path exists...")

@@ -59,7 +59,7 @@ def gen_img(batch_size: int, img_size: int, model_name: str, noise_mode: str) ->
 
     # TODO extra validation for noise modes that only do batch size of 1???
 
-    cmd = "cd {}; gpu=1 batchSize={} net={} imsize={} name={} display=0 noisemode={}"\
+    cmd = "cd {} && gpu=1 batchSize={} net={} imsize={} name={} display=0 noisemode={}"\
           .format(PROJ_DIR, batch_size, latest_cp, img_size, f_name, noise_mode)
 
     print("Executing cmd:\n{}".format(cmd))

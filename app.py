@@ -53,7 +53,7 @@ def images(path):
 
 def gen_img(batch_size: int, img_size: int, model_name: str, noise_mode: str) -> str:
     assert noise_mode in NOISE_MODES
-    date_str = datetime.datetime.now().strftime("%Y-%m-%d_%H:%M:%S")
+    date_str = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
     cp_num, latest_cp = get_latest_checkpoint_num(model_name)
     f_name = "{}_{}_{}".format(model_name, cp_num, date_str)
 
@@ -64,6 +64,8 @@ def gen_img(batch_size: int, img_size: int, model_name: str, noise_mode: str) ->
     print("Executing cmd:\n{}".format(cmd))
     os.system(cmd)
     print("Done executing cmd")
+
+    assert os.path.exists(f_name), "Expected file {} to exist!!!".format(f_name)
 
     return f_name
 

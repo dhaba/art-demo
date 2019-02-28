@@ -31,15 +31,6 @@ def generate():
     resp.content_type = "image/jpeg"
     return resp
 
-    # script = 'sleep 5'
-    # print(time.time())
-    # print("request args: {}".format(request.args))
-    # print('running script:\n{}'.format(script))
-    # os.system(script)
-    # print('done running scripts')
-    # print(time.time())
-    # return str(random.random())
-
 @app.route("/imgs/<path>")
 def images(path):
     print("path is {}".format(path))
@@ -52,15 +43,10 @@ def images(path):
 
 @app.route("/test")
 def test():
-    cmd = "cd {} && ls".format(CP_DIR)
-    cmd = "cd {}".format(CP_DIR)
-    # cmd = "ls"
-    process = subprocess.Popen([cmd], stdout=subprocess.PIPE)
-    print("Run successfully")
-    output, err = process.communicate()
-    print("cmd output: {}\nerr: {}".format(output, err))
+    cmd = 'cd {} && ls'.format(PROJ_DIR)
+    output = subprocess.call([cmd], shell=True)
 
-    return output
+    return 'out: ' + str(output)
 
 
 def gen_img(batch_size: int, img_size: int, model_name: str, noise_mode: str) -> str:
@@ -113,9 +99,6 @@ def get_latest_checkpoint_num(model_name: str):
     return max(cp_nums), latest_cp
 
 
-
-
-
 if __name__ == '__main__':
-    get_latest_checkpoint_num('airmax')
+    # get_latest_checkpoint_num('airmax')
     app.run(host='0.0.0.0', port='8004')

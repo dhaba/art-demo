@@ -28,7 +28,7 @@ def generate():
     print("got img path {}".format(img_path))
 
     resp = make_response(open(img_path).read())
-    resp.content_type = "image/jpeg"
+    resp.content_type = "image/png"
     return resp
 
 @app.route("/imgs/<path>")
@@ -58,8 +58,6 @@ def gen_img(batch_size: int, img_size: int, model_name: str, noise_mode: str) ->
 
     # TODO extra validation for noise modes that only do batch size of 1???
 
-    # cmd = "cd {} && gpu=1 batchSize={} net={} imsize={} name={} display=0 noisemode={} /home/dhaba/torch/install/bin/th generate.lua"\
-    #       .format(PROJ_DIR, batch_size, latest_cp, img_size, f_name, noise_mode)
     cmd = "cd {} && gpu=1 batchSize={} net={} imsize={} name={} display=0 noisemode={} th generate.lua" \
         .format(PROJ_DIR, batch_size, latest_cp, img_size, f_name, noise_mode)
 

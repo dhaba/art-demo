@@ -64,8 +64,13 @@ def gen_img(batch_size: int, img_size: int, model_name: str, noise_mode: str) ->
 
     print("Executing cmd:\n{}".format(cmd))
     # os.system(cmd)
-    cmd_succ = subprocess.check_output([cmd], shell=True)
-    print("Done executing cmd (succ={})".format(cmd_succ))
+    # cmd_succ = subprocess.check_output([cmd], shell=True)
+    # print("Done executing cmd (succ={})".format(cmd_succ))
+
+    process = subprocess.Popen([cmd], stdout=subprocess.PIPE)
+    print("Run successfully")
+    output, err = process.communicate()
+    print("cmd output: {}\nerr: {}".format(output, err))
 
     f_name = PROJ_DIR + f_name + ".png"
 

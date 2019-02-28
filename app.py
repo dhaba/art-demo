@@ -4,7 +4,7 @@ import os, time, subprocess, random, datetime, glob, subprocess
 
 app = Flask(__name__)
 
-PROJ_DIR = '~/art-fart/art-DCGAN/'
+PROJ_DIR = '/home/dhaba/art-fart/art-DCGAN/'
 # PROJ_DIR = '/Users/davishaba/PycharmProjects/demo/'
 CP_DIR = PROJ_DIR + 'checkpoints/'
 GEN_DIR = PROJ_DIR

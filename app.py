@@ -1,4 +1,4 @@
-from flask import Flask, request, make_response
+from flask import Flask, request, make_response, send_file
 import os, time, subprocess, random, datetime, glob, subprocess
 
 
@@ -27,9 +27,10 @@ def generate():
     img_path = gen_img(batch_size, img_size, model_name, noise_mode)
     print("got img path {}".format(img_path))
 
-    resp = make_response(open(img_path).read())
-    resp.content_type = "image/png"
-    return resp
+    return send_file(img_path, mimetype='image/png')
+    # resp = make_response(open(img_path).read())
+    # resp.content_type = "image/png"
+    # return resp
 
 @app.route("/imgs/<path>")
 def images(path):

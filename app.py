@@ -24,7 +24,7 @@ def generate():
     model_name = request.args['model']
     noise_mode = request.args['noiseMode']
 
-    img_path = gen_img(batch_size, img_size, model_name, noise_mode)
+    _, img_path = gen_img(batch_size, img_size, model_name, noise_mode)
     print("got img path {}".format(img_path))
 
     resp = make_response(open(img_path).read())
@@ -54,8 +54,8 @@ def images(path):
 def gen_img(batch_size: int, img_size: int, model_name: str, noise_mode: str) -> str:
     assert noise_mode in NOISE_MODES
     date_str = datetime.datetime.now().strftime("%Y-%m-%d_%H:%M:%S")
-    latest_cp = get_latest_checkpoint_num(model_name)
-    f_name = "{}_{}_{}".format(model_name, latest_cp, date_str)
+    cp_num, latest_cp = get_latest_checkpoint_num(model_name)
+    f_name = "{}_{}_{}".format(model_name, cp_num, date_str)
 
     # TODO extra validation for noise modes that only do batch size of 1???
 
@@ -87,7 +87,7 @@ def get_latest_checkpoint_num(model_name: str):
     assert os.path.exists(latest_cp), "Expected checkpoint at path {}, but not found".format(latest_cp)
 
     print("latest check {}".format(latest_cp))
-    return latest_cp
+    return max(cp_nums), latest_cp
 
 
 

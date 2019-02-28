@@ -62,7 +62,8 @@ def gen_img(batch_size: int, img_size: int, model_name: str, noise_mode: str) ->
           .format(PROJ_DIR, batch_size, latest_cp, img_size, f_name, noise_mode)
 
     print("Executing cmd:\n{}".format(cmd))
-    subprocess.call([cmd], shell=True)
+    # subprocess.call([cmd], shell=True)
+    os.system(cmd)
     print("Done executing command".format(cmd))
     # os.system(cmd)
     # cmd_succ = subprocess.check_output([cmd], shell=True)

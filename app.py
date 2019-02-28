@@ -50,7 +50,7 @@ def images(path):
     # resp.content_type = "image/jpeg"
     # return resp
 
-@app.route("test")
+@app.route("/test")
 def test():
     cmd = "cd {} && ls".format(CP_DIR)
     process = subprocess.Popen([cmd], stdout=subprocess.PIPE)
